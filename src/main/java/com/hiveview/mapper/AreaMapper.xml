@@ -21,6 +21,12 @@
     from j_area
     where id = #{id,jdbcType=BIGINT}
   </select>
+  <select id="getAreaByCode" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select
+    <include refid="Base_Column_List" />
+    from j_area
+    where code = #{areaCode}
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
     delete from j_area
     where id = #{id,jdbcType=BIGINT}
@@ -165,5 +171,11 @@
         AND parent_id = #{parentId,jdbcType=BIGINT}
       </if>
     </where>
+  </select>
+  <!-- 查询全部的区域  ——李文辉 -->
+  <select id="queryAllArea" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from j_area
   </select>
 </mapper>

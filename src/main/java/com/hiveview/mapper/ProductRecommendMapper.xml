@@ -19,6 +19,7 @@
     <result column="workAge" property="workAge"/>
     <result column="adviser_type" property="adviserType"/>
     <result column="memberName" property="memberName"/>
+    <result column="memberCategoryName" property="memberCategoryName"/>
   </resultMap>
   <sql id="Base_Column_List" >
     id, product_id, plate, recommend_order, status, add_time, update_time, type, operator_id
@@ -202,10 +203,12 @@
     p.summary,
     date_format(now(), '%Y') - date_format(m.work_time, '%Y') AS workAge,
     m.adviser_type,
-    m.name as memberName
+    m.name as memberName,
+    cs.name as memberCategoryName
     FROM j_product_recommend pr INNER JOIN j_product p on pr.product_id = p.id
                               LEFT JOIN j_class c on c.id = p.class_id
                               LEFT JOIN  j_member m on p.member_id = m.id
+                              LEFT JOIN j_class cs ON m.adviser_type = cs.code
     WHERE p.status = 4
     <if test="productName != null" >
       AND p.title like CONCAT("%",#{productName,jdbcType=TIMESTAMP},"%")

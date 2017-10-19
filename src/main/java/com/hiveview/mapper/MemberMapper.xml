@@ -30,6 +30,7 @@
     <result column="relate_company_date" property="relateCompanyDate" jdbcType="TIMESTAMP" />
     <result column="areaFullName" property="areaFullName" jdbcType="VARCHAR" />
     <result column="invite_code" property="inviteCode" jdbcType="VARCHAR" />
+    <result column="categoryName" property="categoryName" jdbcType="VARCHAR" />
   </resultMap>
   <resultMap id="ResultMapWithBLOBs" type="com.hiveview.entity.Member" extends="BaseResultMap" >
     <result column="personal_profile" property="personalProfile" jdbcType="LONGVARCHAR" />
@@ -315,40 +316,41 @@
   </select>
   <select id="get" parameterType="com.hiveview.entity.Member"  resultMap="ResultMapWithBLOBs">
       select
-      <include refid="Base_Column_List" />
-      ,
-      <include refid="Blob_Column_List" />
-      from j_member
+      m.id, m.name, m.head_portrait,m.nation, m.sex, m.level, m.work_time, m.password, m.description, m.mobile, m.qq,m.email,
+      m.check_status, m.add_time, m.update_time, m.status, m.real_name_authentication, m.company_id, m.address,
+      m.type,m.need_view_count,m.area_code,m.adviser_type,m.invite_code,m.personal_profile,
+      c.company_name as companyName
+      FROM j_member m LEFT JOIN j_company c ON m.company_id = c.id
       <where>
         <if test="id != null" >
-          id = #{id,jdbcType=BIGINT}
+          m.id = #{id,jdbcType=BIGINT}
         </if>
         <if test="sex != null" >
-          AND sex = #{sex,jdbcType=CHAR}
+          AND m.sex = #{sex,jdbcType=CHAR}
         </if>
         <if test="level != null" >
-          AND level = #{level,jdbcType=INTEGER}
+          AND m.level = #{level,jdbcType=INTEGER}
         </if>
         <if test="mobile != null" >
-          AND mobile = #{mobile,jdbcType=VARCHAR}
+          AND m.mobile = #{mobile,jdbcType=VARCHAR}
         </if>
         <if test="password != null" >
-          AND password =  #{password,jdbcType=VARCHAR}
+          AND m.password =  #{password,jdbcType=VARCHAR}
         </if>
         <if test="checkStatus != null" >
-          AND check_status = #{checkStatus,jdbcType=TINYINT}
+          AND m.check_status = #{checkStatus,jdbcType=TINYINT}
         </if>
         <if test="status != null" >
-          AND  status =  #{status,jdbcType=TINYINT}
+          AND  m.status =  #{status,jdbcType=TINYINT}
         </if>
         <if test="realNameAuthentication != null" >
-          AND real_name_authentication = #{realNameAuthentication,jdbcType=TINYINT}
+          AND m.real_name_authentication = #{realNameAuthentication,jdbcType=TINYINT}
         </if>
         <if test="companyId != null" >
-          AND company_id = #{companyId,jdbcType=BIGINT}
+          AND m.company_id = #{companyId,jdbcType=BIGINT}
         </if>
         <if test="type != null" >
-          AND type = #{type,jdbcType=TINYINT}
+          AND m.type = #{type,jdbcType=TINYINT}
         </if>
   </where>
   </select>
@@ -421,9 +423,11 @@
       m.adviser_type,
       date_format(now(), '%Y') - date_format(m.work_time, '%Y') AS workAge,
       c.company_name as companyName,
-      a.full_name as areaFullName
+      a.full_name as areaFullName,
+      cs.name as categoryName
       FROM j_member m LEFT JOIN j_company c ON m.company_id = c.id
                       LEFT JOIN  j_area a on a.code = m.area_code
+                      LEFT JOIN j_class cs ON m.adviser_type = cs.code
                       <if test="recommendShow == true" >
                         LEFT JOIN  j_member_recommend mr on mr.member_id = m.id
                       </if>

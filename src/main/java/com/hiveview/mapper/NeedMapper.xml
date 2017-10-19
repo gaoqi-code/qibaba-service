@@ -54,6 +54,7 @@
           n.hits,
           n.end_time,
           n.need_mobile,
+          n.charge_type,
           m.name as memberName,
           m.mobile,
           m.address
@@ -69,12 +70,13 @@
       member_id, company_id, attribute, 
       status, hits, confine_status, 
       class_id, timing_status, type, 
-      add_time, update_time,end_time,need_mobile)
+      add_time, update_time,end_time,need_mobile,member_type)
     values (#{id,jdbcType=BIGINT}, #{title,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR}, 
       #{memberId,jdbcType=BIGINT}, #{companyId,jdbcType=BIGINT}, #{attribute,jdbcType=VARCHAR}, 
       #{status,jdbcType=TINYINT}, #{hits,jdbcType=INTEGER}, #{confineStatus,jdbcType=TINYINT}, 
       #{classId,jdbcType=BIGINT}, #{timingStatus,jdbcType=TINYINT}, #{type,jdbcType=VARCHAR}, 
-      #{addTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP},#{needMobile,jdbcType=VARCHAR})
+      #{addTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP},
+      #{needMobile,jdbcType=VARCHAR},#{memberType})
   </insert>
   <insert id="insertSelective" parameterType="com.hiveview.entity.Need" >
     insert into j_need
@@ -219,6 +221,9 @@
       </if>
       <if test="updateTime != null" >
         update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="memberType != null" >
+        member_type = #{memberType}
       </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
@@ -432,5 +437,9 @@
     </foreach>
   </delete>
   <!--用户自定义需求 end-->
-
+  <!--  -->
+  <delete id="deleteUserNeedByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from j_user_need
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
 </mapper>

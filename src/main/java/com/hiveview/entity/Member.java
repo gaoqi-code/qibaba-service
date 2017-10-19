@@ -72,6 +72,16 @@ public class Member {
 
 	private String inviteCode;
 
+	private String categoryName;
+
+	public String getCategoryName() {
+		return categoryName;
+	}
+
+	public void setCategoryName(String categoryName) {
+		this.categoryName = categoryName;
+	}
+
 	public String getInviteCode() {
 		return inviteCode;
 	}

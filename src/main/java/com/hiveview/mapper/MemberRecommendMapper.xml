@@ -20,6 +20,7 @@
     <result column="workAge" property="workAge"  />
     <result column="qq" property="qq"  />
     <result column="level" property="level"  />
+    <result column="categoryName" property="categoryName"  />
   </resultMap>
   <sql id="Base_Column_List" >
     id, member_id, plate, recommend_order, status, add_time, update_time, type, operator_id
@@ -206,10 +207,12 @@
     m.qq,
     m.level,
     date_format(now(), '%Y') - date_format(m.work_time, '%Y') AS workAge,
-    a.full_name as areaFullName
+    a.full_name as areaFullName,
+    cs.name as categoryName
     FROM j_member_recommend mr INNER JOIN j_member m on mr.member_id = m.id
                               LEFT JOIN j_company c on c.id = m.company_id
                             LEFT JOIN  j_area a on a.code = m.area_code
+                        LEFT JOIN j_class cs ON m.adviser_type = cs.code
     WHERE m.check_status = 4 and m.status = 1 and m.type = 1
     <if test="memberName != null" >
       AND m.name like CONCAT("%",#{memberName,jdbcType=TIMESTAMP},"%")

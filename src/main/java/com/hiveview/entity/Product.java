@@ -50,6 +50,16 @@ public class Product {
 
     private String summary;
 
+    private String memberCategoryName;
+
+    public String getMemberCategoryName() {
+        return memberCategoryName;
+    }
+
+    public void setMemberCategoryName(String memberCategoryName) {
+        this.memberCategoryName = memberCategoryName;
+    }
+
     public String getSummary() {
         return summary;
     }

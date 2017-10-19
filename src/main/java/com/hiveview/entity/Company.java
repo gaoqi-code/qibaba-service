@@ -22,6 +22,18 @@ public class Company {
     private Date updateTime;
 
     private String code;
+    
+    private Integer membercount;
+   
+    private String areaCode;
+
+    public String getAreaCode() {
+        return areaCode;
+    }
+
+    public void setAreaCode(String areaCode) {
+        this.areaCode = areaCode;
+    }
 
     public String getLogo() {
         return logo;
@@ -102,4 +114,16 @@ public class Company {
     public void setCode(String code) {
         this.code = code;
     }
+
+	public Integer getMembercount() {
+		return membercount;
+	}
+
+	public void setMembercount(Integer membercount) {
+		this.membercount = membercount;
+	}
+
+
+	
+    
 }

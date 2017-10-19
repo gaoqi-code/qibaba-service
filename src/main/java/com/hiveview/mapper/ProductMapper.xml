@@ -22,6 +22,7 @@
     <result column="weight_value" property="weightValue" jdbcType="INTEGER" />
     <result column="recommend" property="recommend" jdbcType="INTEGER" />
     <result column="summary" property="summary"  />
+    <result column="memberCategoryName" property="memberCategoryName"/>
     <association property="member" javaType="com.hiveview.entity.Member">
       <result column="memberName" property="name" jdbcType="VARCHAR" />
       <result column="head_portrait" property="headPortrait" jdbcType="VARCHAR" />
@@ -33,6 +34,7 @@
       <result column="workAge" property="workAge"/>
       <result column="logo" property="logo"/>
       <result column="companyName" property="companyName"/>
+      <result column="mId" property="id"/>
     </association>
   </resultMap>
   <sql id="Base_Column_List" >
@@ -291,7 +293,7 @@
           </if>
           and p.status != 2
         </where>
-        order by add_time desc
+        order by p.update_time DESC,p.add_time desc
     </select>
     <select id="getOpendProduct" resultMap="BaseResultMap" parameterType="com.hiveview.entity.Product" >
         SELECT
@@ -313,6 +315,7 @@
           p.real_price,
           p.summary,
           c.name as className,
+          m.id as mId,
           m.name as memberName,
           m.head_portrait,
           m.description,
@@ -368,9 +371,11 @@
           date_format(now(), '%Y') - date_format(m.work_time, '%Y') AS workAge,
           cm.logo,
           cm.company_name as companyName,
-          m.adviser_type
+          m.adviser_type,
+          c1.name as memberCategoryName
         FROM j_product p LEFT JOIN j_class c ON p.class_id = c.id
                          LEFT JOIN  j_member m on p.member_id = m.id
+                         LEFT JOIN j_class c1 ON m.adviser_type = c1.code
                          LEFT JOIN j_area a on a.code = m.area_code
                          LEFT JOIN j_company cm on cm.id = m.company_id
           <where>

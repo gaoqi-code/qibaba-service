@@ -42,4 +42,23 @@ public class CompanyServiceImpl implements ICompanyService {
 
         return companyDao.getCompany(company);
     }
+	@Override
+	public List<Company> queryCompanyList() {
+		
+		return companyDao.queryCompanyList();
+	}
+	@Override
+	public List<Company> queryCompanyListByName(String name) {
+		return companyDao.queryCompanyListByName(name);
+	}
+	@Override
+	public Company selectByPrimaryKey(Long id) {
+		
+		return companyDao.selectByPrimaryKey(id);
+	}
+	@Override
+	public int updateByPrimaryKeySelective(Company record) {
+		
+		return companyDao.updateByPrimaryKeySelective(record);
+	}
 }
